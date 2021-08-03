@@ -1,0 +1,5 @@
+/build
+
+# mars build outputs
+/src/main/java/com/tencent/**
+/src/main/jniLibs/**

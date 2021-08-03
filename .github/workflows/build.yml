@@ -1,0 +1,64 @@
+name: Build
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version to publish to maven'
+        required: true
+
+jobs:
+  build_xlog:
+    runs-on: ubuntu-latest
+    env:
+      MARS_ROOT: ${{ github.workspace }}/mars
+      REPO_ROOT: ${{ github.workspace }}/android_proj
+      NDK_VERSION: '20.0.5594570'
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: android_proj
+
+      - name: Initialization Environment
+        run: |
+          sudo mv /usr/bin/python2 /usr/bin/python
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;$NDK_VERSION"
+
+      - name: Checkout Mars
+        uses: actions/checkout@v2
+        with:
+          repository: Tencent/mars
+          ref: master
+          path: mars
+
+      - name: Build xlog
+        run: |
+          export NDK_ROOT=$ANDROID_HOME/ndk/$NDK_VERSION
+          cd $MARS_ROOT/mars
+          sed -i '/if __name__ == /a\    archs = sys.argv[1:]\n    main(False, archs, '\''--target libzstd_static marsxlog'\'')\n    exit(0)' build_android.py
+          python build_android.py armeabi-v7a arm64-v8a x86
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: xlog_sdk
+          path: ${{ env.MARS_ROOT }}/mars/libraries/mars_xlog_sdk
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Prepare AAR build source
+        run: |
+          mkdir -p $REPO_ROOT/xlog/src/main/jniLibs
+          cp -a $MARS_ROOT/mars/libraries/mars_xlog_sdk/libs/ $REPO_ROOT/xlog/src/main/jniLibs/
+          mkdir -p $REPO_ROOT/xlog/src/main/java/com/tencent
+          cp -a $MARS_ROOT/mars/libraries/mars_xlog_sdk/src/main/java/com/tencent/ $REPO_ROOT/xlog/src/main/java/com/tencent
+
+      - name: Build and Publish AAR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          cd $REPO_ROOT && chmod +x gradlew
+          ./gradlew xlog:publishMavenPublicationToGithubPackagesRepository
