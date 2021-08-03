@@ -18,9 +18,9 @@ maven {
 }
 ```
 
->方便起见，工件直接托管在了 Github Packages，由于[及其反人类的设计](https://github.community/t/download-from-github-package-registry-without-authentication/14407/111)，哪怕是公开的仓库，也不能匿名范围，必须提供一个具有 `read:packages` 权限的 Github 账户 token 才能访问。
+>方便起见，工件直接托管在了 Github Packages，由于[极其反人类的设计](https://github.community/t/download-from-github-package-registry-without-authentication/14407/111)，哪怕是公开的仓库，也不能匿名访问，必须提供一个具有 `read:packages` 权限的 Github 账户 token 才可以。
 >
->这里提供了一个我自己的 Machine Account，但建议你替换成自己的 token 以免收到我个人账户状态变更的影响。
+>这里提供了一个我自己的 Machine Account，但建议你替换成自己的 token 以免受到我个人账户状态变更的影响。
 
 2. 添加依赖
 
