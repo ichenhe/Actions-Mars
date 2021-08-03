@@ -2,6 +2,11 @@
 
 利用 Github Actions 编译 [Tencent Mars xlog](https://github.com/Tencent/mars) 的 Android Libs，并打包发布到 Github Packages 的 Maven 仓库。
 
+🚩 特别说明：
+
+- 想改 CPU 架构的修改[这一行](https://github.com/ichenhe/Actions-Mars/blob/2f7a7e759625d657f9d9d8c025e18cd2c34533ac/.github/workflows/build.yml#L41)。
+- 本仓库的代码是打包为 AAR 的 wrapper 工程，编译所需的 mars 源码总是动态地拉取。
+
 ## 懒人看这
 
 你可以直接使用本仓库编译好的 AAR，此工件为 Tencent/Mars 源码 AS IS 编译，未做修改。
