@@ -18,7 +18,7 @@ maven {
     url "https://maven.pkg.github.com/ichenhe/Actions-Mars"
     credentials{
         username("chenhe-pub")
-        password("&#103;hp_iEietheghA8ocZN0vCEvb6qCCx0xsU4YMFBf")
+        password("\u0067hp_iEietheghA8ocZN0vCEvb6qCCx0xsU4YMFBf")
     }
 }
 ```
