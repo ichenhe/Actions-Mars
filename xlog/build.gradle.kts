@@ -19,6 +19,12 @@ android {
 
         consumerProguardFiles("consumer-rules.pro")
     }
+    
+    sourceSets {
+        getByName("main"){
+            jniLibs.srcDir("src/main/libs")
+        }
+    }
 
     buildTypes {
         release {
